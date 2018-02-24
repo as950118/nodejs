@@ -1,0 +1,28 @@
+doctype
+html
+  head
+    meta(charset='utf-8')
+  body
+    h1
+      a(href='/topic') ServerSide JavaScript
+    ul
+      each topic in topics
+        li
+          - rid = encodeURIComponent(topic['@rid'])
+          a(href='/topic/'+rid)=topic.title
+    article
+      if topic
+        h2=topic.title
+        =topic.description
+      else
+        h2 Welcome
+        | This is serever side JavaScript Tutorial
+    ul
+      li
+        a(href='/topic/add') add
+      if topic
+        - rid = encodeURIComponent(topic['@rid'])
+        li
+          a(href='/topic/' + rid + '/edit') edit
+        li
+          a(href='/topic/' + rid + '/del') del

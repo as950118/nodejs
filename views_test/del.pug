@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    meta(charset='tuf-8')
+  body
+  h1
+    a(href='/topic') ServerSide JavaScript
+  ul
+    each topic in topics
+      li
+        - rid = encodeURIComponent(topic['@rid'])
+        a(href='/topic/'+rid)=topic.title
+  article
+    - rid = encodeURIComponent(topic['@rid'])
+    form(action='/topic/'+rid+'/del' method='post')
+      h1='Relay Delete? ' + topic.title
+      p
+        input(type='submit' value='YES')
+    a(href='/topic/'+rid) NO

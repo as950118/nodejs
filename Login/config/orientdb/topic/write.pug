@@ -1,0 +1,22 @@
+
+html
+  head
+  body
+    .container
+      table.table.table-bordered
+        thead
+          caption Write
+        tbody
+          form(action='/write', method='post', enctype='multiplart/form-data')
+            tr
+              th Title
+              td
+                input(type='text', placeholder='Title', name='title')
+            tr
+              th Content
+              td
+                textarea(cols='10', placeholder='Content', name='content')
+            tr
+              td(colspan='2')
+                input(type='submit')
+                input(type='button', value='List', onclick="javascript:location.href='/board'")

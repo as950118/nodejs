@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    form(name='myForm', action='/view', method='post')
+      input(type='hidden', name='some_key1', value='some_value1')
+      input(type='hidden', name='some_key2', value='some_value2')
+
+  body
+    .container
+      p
+        #{results.title}
+      p
+        #{results.content}
+
+    a.btn.btn-default.pull-right('/main') Main

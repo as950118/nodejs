@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    met(charset='utf-8')
+  body
+    h1 Signup
+    form(action='/auth/signup' method='post')
+      p
+        input(type='text' name='username' placeholder='ID')
+      p
+        input(type='password' name='password' placeholder='PW')
+      p
+        input(type='text' name='email' placeholder='Email')
+      p
+        input(type='submit')

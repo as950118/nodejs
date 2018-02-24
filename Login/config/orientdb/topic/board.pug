@@ -1,0 +1,35 @@
+doctype html
+html
+  head
+    form(name='myForm', action='/view', method='post')
+      input(type='hidden', name='no', value=#{results[i].no})
+      input(type='hidden', name='title', value=#{results[i].title})
+
+  body
+    .container
+      table.table.table-striped
+        thead
+          tr
+            th No
+            th Title
+            th Id
+            th Datetime
+            th View
+          tbody
+          - for(i=0; i<parseInt(results.length); i++)
+            tr
+              td
+                a(href='#', onclick='javascript:document.myForm.submit();') #{results[i].no}
+              td
+                a(href='#', onclick='javascript:document.myForm.submit();') #{results[i].title}
+              td #{results[i].id}
+              td #{results[i].date}
+              td #{results[i].view}
+
+
+    a.btn.btn-default.pull-right('/main') Main
+
+    .text-center
+      ul.pagination
+        li
+          a(href='#') i
