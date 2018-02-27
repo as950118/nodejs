@@ -39,7 +39,7 @@ html
               - for(i=(num-1)*10; i<num*10; i++)
                 tr
                   td.col-md-1
-                    a(href='/view/'+ results[i].no) #{results[i].no}
+                    a(href='/view/'+ results[i].no) #{results.length - i}
                   td.col-md-2
                     a(href='/view/'+ results[i].no) #{results[i].title}
                   td.col-md-1 #{results[i].id}
@@ -49,7 +49,7 @@ html
               - for(i=(num-1)*10; i<results.length; i++)
                 tr
                   td.col-md-1
-                    a(href='/view/'+ results[i].no) #{results[i].no}
+                    a(href='/view/'+ results[i].no) #{results.length-i}
                   td.col-md-2
                     a(href='/view/'+ results[i].no) #{results[i].title}
                   td.col-md-1 #{results[i].id}
@@ -58,10 +58,10 @@ html
       form.pull-left(action='/search' method='post')
         select(name='select')
           option(name='title') Title
-          option Content
-          option Title + Contents
-          option Reply
-          option ID
+          option(name='content') Content
+          option(name='titlecontent') Title + Contents
+          option(name='reply') Reply
+          option(name='id') ID
         input(type='text' name='search')
         input(type='submit' value='Search')
 

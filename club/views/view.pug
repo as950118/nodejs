@@ -26,11 +26,6 @@ html
                 a.btn-warning(href='/login') Login
               li
                 a.btn-warning(href='/signup') Signup
-    div
-      a.btn.btn-primary.pull-left(href='/Main') Main
-      a.btn.btn-primary.pull-left(href='/Board/1') Board
-      br
-      hr
     p
       h1 Title
         p.text-primary
@@ -38,7 +33,7 @@ html
     hr
     p
       h1 Contents
-        p.text-primary
+        p
           =results.content
     hr
     if results.id == id

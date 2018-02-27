@@ -29,6 +29,13 @@ module.exports = function(app){
         id:username,
         pw:password
       }
+      var filter = userdata.id.split('')
+      for(var i in filter){
+      	if(filter[i]==="'"||filter[i]==='"'||filter[i]==="="||filter[i]==="<"||filter[i]===">"){
+        	console.log('SQL INJECTION')
+        	return done(null, false)
+        }
+      }
       var sql = 'SELECT * FROM log WHERE id=:id'
       db_log.query(sql, {params:{id:userdata.id}})
       .then(function(results){

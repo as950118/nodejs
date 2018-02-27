@@ -9,13 +9,28 @@ module.exports = function(passport){
   //메인
   app.get('/main', function(req, res){
     console.log('Main')
-    res.render('main', {id:req.session.passport.user})
+    if(req.session.passport){
+      res.render('main', {id:req.session.passport.user})
+    }
+    else{
+      res.render('main', {id:''})
+    }
   })
   //
   //로그인
   app.get('/login', function(req, res){
     console.log('Login')
-    res.render('login')
+    if(req.session.passport){
+      if(req.session.passport.user){
+        res.redirect('/main')
+      }
+      else{
+        res.render('login')
+      }
+    }
+    else{
+      res.render('login')
+    }
   })
   app.post('/login',
     passport.authenticate('local', //local 방식의 로그인 방식이 구현, facebook이나 twitter 등이 들어갈수 있음
@@ -34,7 +49,12 @@ module.exports = function(passport){
   //회원가입
   app.get('/signup', function(req, res){
     console.log('Signup')
-    res.render('signup', {id:req.session.passport.user})
+    if(req.session.passport.user){
+      res.redirect('/main')
+    }
+    else{
+      res.render('signup', {id:req.session.passport.user})
+    }
   })
   app.post('/signup', function(req, res){
     hasher({password:req.body.password}, function(err, pass, salt, hash){
@@ -84,7 +104,7 @@ module.exports = function(passport){
     }
   })
   app.post('/write', function(req, res){
-    var sql ='SELECT FROM board'
+    var sql ='SELECT FROM board ORDER BY no'
     db_board.query(sql)
     .then(function(results){
       var board = {
@@ -95,15 +115,15 @@ module.exports = function(passport){
           pw:req.user.hash,
           salt:req.user.salt,
           date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS'),
-          no:results.length+1,
+          no:results[results.length-1].no + 1,
           view:0
         }
       }
       var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt)'
       db_board.query(sql, board)
-      .then(function(reuslts){
+      .then(function(reuslts2){
         console.log('Complete Write')
-        res.redirect('/board/:num')
+        res.redirect('/board/1')
       }, function(error){
         console.log(error)
         res.status(500)
@@ -151,7 +171,7 @@ module.exports = function(passport){
       db_board.query(sql, param)
       .then(function(results){
         console.log('Complete Delete')
-        res.redirect('/board/:num')
+        res.redirect('/board/1')
       })
     }
     else{
@@ -204,7 +224,7 @@ module.exports = function(passport){
   app.get('/logout', function(req, res){
     req.logout()
     req.session.save(function(){
-      res.history.back()
+      res.redirect('/main')
     })
   })
 
