@@ -4,6 +4,8 @@ module.exports = function(passport){
   var hasher = bkdf2Password()
   var db_log = require('./db_log.js')()
   var db_board = require('./db_board.js')()
+  var db_reply = require('./db_reply.js')()
+
   require('date-utils')
   var newDate = new Date()
   //메인
@@ -20,13 +22,8 @@ module.exports = function(passport){
   //로그인
   app.get('/login', function(req, res){
     console.log('Login')
-    if(req.session.passport){
-      if(req.session.passport.user){
-        res.redirect('/main')
-      }
-      else{
-        res.render('login')
-      }
+    if(req.session.passport && req.session.passport.user){
+      res.redirect('/main')
     }
     else{
       res.render('login')
@@ -49,7 +46,7 @@ module.exports = function(passport){
   //회원가입
   app.get('/signup', function(req, res){
     console.log('Signup')
-    if(req.session.passport.user){
+    if(req.session.passport && req.session.passport.user){
       res.redirect('/main')
     }
     else{
@@ -87,7 +84,13 @@ module.exports = function(passport){
     var sql = 'SELECT FROM board ORDER BY no DESC'
     db_board.query(sql)
     .then(function(results){
-      res.render('board', {results:results, id:req.session.passport.user, num:req.params.num})
+      if(req.session.passport && req.session.passport.user){
+        var id = req.session.passport.user
+      }
+      else{
+        var id = ''
+      }
+      res.render('board', {results:results, id:id, num:req.params.num})
     })
   })
   //
@@ -95,7 +98,7 @@ module.exports = function(passport){
   //글쓰기
   app.get('/write', function(req, res){
     console.log('Write')
-    if(req.session.passport.user){
+    if(req.session.passport && req.session.passport.user){
       res.render('write', {id:req.session.passport.user})
     }
     else{
@@ -107,6 +110,13 @@ module.exports = function(passport){
     var sql ='SELECT FROM board ORDER BY no'
     db_board.query(sql)
     .then(function(results){
+      //첫번째 글일경우
+      if(results.length===0){
+        var len = 1
+      }
+      else{
+        var len = results[results.length-1].no + 1
+      }
       var board = {
         params:{
           title:req.body.title,
@@ -115,7 +125,7 @@ module.exports = function(passport){
           pw:req.user.hash,
           salt:req.user.salt,
           date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS'),
-          no:results[results.length-1].no + 1,
+          no:len,
           view:0
         }
       }
@@ -142,17 +152,30 @@ module.exports = function(passport){
     }
     db_board.query(sql, param)
     .then(function(results){
-      var sql = 'UPDATE board SET view=:view WHERE no=:no'
-      var param = {
-        params:{
-          view:results[0].view + 1,
-          no:results[0].no
+      //댓글 불러오기
+      var sql = 'SELECT FROM reply WHERE board_no=:no ORDER BY no'
+      db_reply.query(sql, param)
+      .then(function(results_reply){
+        //조회수 증가
+        var sql = 'UPDATE board SET view=:view WHERE no=:no'
+        var param = {
+          params:{
+            view:results[0].view + 1,
+            no:results[0].no
+          }
         }
-      }
-      db_board.query(sql, param)
-      .then(function(results2){
-        console.log('Complete Select : ' + results[0].no)
-        res.render('view', {results:results[0], id:req.session.passport.user})
+        db_board.query(sql, param)
+        .then(function(results2){
+          console.log('results2 :' + results2)
+          console.log('Complete Select : ' + results[0].no)
+          if(req.session.passport && req.session.passport.user){
+            var id = req.session.passport.user
+          }
+          else{
+            var id = ''
+          }
+            res.render('view', {results:results[0], id:id, results_reply:results_reply})
+        })
       })
     })
   })
@@ -217,6 +240,83 @@ module.exports = function(passport){
       .then(function(results){
           res.redirect('/view/' + req.body.no)
       })
+  })
+  //
+
+  //댓글
+  app.post('/reply', function(req, res){
+    var sql = 'SELECT FROM reply'
+    db_reply.query(sql)
+    .then(function(results){
+      //첫번째 댓글일경우
+      if(results.length===0){
+        var len = 1
+      }
+      else{
+        var len = results[results.length-1].no + 1
+      }
+      var sql = 'INSERT INTO reply(board_no, no, id, reply, date) VALUES(:board_no, :no, :id, :reply, :date)'
+      var param = {
+        params:{
+          board_no:req.body.board_no,
+          id:req.session.passport.user,
+          no:len,
+          reply:req.body.reply,
+          date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS')
+        }
+      }
+      db_reply.query(sql, param)
+      .then(function(results){
+        console.log("Complete Reply : " + results[0].board_no + ' ' + results[0].no)
+        res.redirect('/view/' + results[0].board_no)
+      })
+    })
+  })
+  //댓글 삭제
+  app.get('/delete_reply/:no/:id', function(req, res){
+    if(req.params.id === req.session.passport.user){
+      var sql = 'DELETE FROM reply WHERE no=:no'
+      var param = {
+        params:{
+          no:req.params.no
+        }
+      }
+      db_reply.query(sql, param)
+      .then(function(results){
+        console.log('Complete Delete Reply')
+        res.redirect('/view/' + req.params.no)
+      })
+    }
+    else{
+      console.log('Auth Failed')
+      res.redirect('/view/' + req.params.no)
+    }
+  })
+  //
+
+  //검색
+  app.post('/search', function(req, res){
+    var sel = req.body.select
+    var sql = 'SELECT FROM board WHERE title=:search'
+    if(sel === 'title'){
+    }
+    else if(sel === 'content'){
+
+    }
+    else if(sel === 'titlecontent'){
+
+    }
+    else if(sel === 'reply'){
+
+    }
+    else if(sel === 'id'){
+
+    }
+    var param = {
+      params:{
+        search:req.body.search
+      }
+    }
   })
   //
 
