@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    link(rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+    style.
+      textarea.autosize{min-height:50px}
+  body
+    nav.navbar.navbar-default
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#myNavbar')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          .navbar-brand SCREENDOOR
+        #myNavbar.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/main') Main
+            li
+              a(href='/board/1') Board
+            if id
+              li
+                a.btn-danger(href='/logout') Logout
+            else
+              li
+                a.btn-warning(href='/login') Login
+              li
+                a.btn-warning(href='/signup') Signup
+    .container
+      div.row
+        div.col-md-12
+          h3.text-primary Profile
+        div-col-md-12
+          div-col-md-12
+            h4 ID  #{results.id}
+          div-col-md-12
+            h4 Email  #{results.email}
+          div-col-md-12
+            h4 Date  #{results.date}
+        if results.id == id
+          div.pull-right
+            div-col-md-12
+              a.btn.btn-warning.href('/update_profile/' + id) Update
+            div-col-md-12
+              a.btn.btn-danger.href('/delete_profile/' + id) Delete
+    script(src='https://code.jquery.com/jquery-2.2.4.min.js', integrity='sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")

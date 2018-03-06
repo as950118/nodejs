@@ -5,9 +5,9 @@ module.exports = function(passport){
   var db_log = require('./db_log.js')()
   var db_board = require('./db_board.js')()
   var db_reply = require('./db_reply.js')()
-
   require('date-utils')
   var newDate = new Date()
+
   //메인
   app.get('/main', function(req, res){
     console.log('Main')
@@ -19,6 +19,54 @@ module.exports = function(passport){
     }
   })
   //
+
+  //회원가입
+  app.get('/signup', function(req, res){
+    console.log('Signup')
+    if(req.session.passport && req.session.passport.user){
+      res.redirect('/main')
+    }
+    else{
+      res.render('signup', {id:req.session.passport.user})
+    }
+  })
+  app.post('/signup', function(req, res){
+    hasher({password:req.body.password}, function(err, pass, salt, hash){
+      var sql = 'INSERT INTO log(id, pw, salt, email, date) VALUES(:id, :pw, :salt, :email, :date)'
+      var userdata = {
+        id:req.body.username,
+        pw:hash,
+        salt:salt,
+        email:req.body.email,
+        date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS')
+      }
+      //중복검사
+      var sql = 'SELECT FROM log WHERE id=:id OR email=:email'
+      db_log.query(sql, {params:userdata})
+      .then(function(results){
+        if(results){
+          console.log('Already Existed ID or Email')
+          res.redirect('/signup')
+        }
+        else{
+          db_log.query(sql, {params:userdata})
+          .then(function(reuslts){
+            req.login(userdata, function(err){
+              req.session.save(function(){
+                console.log('Complete Signup')
+                res.redirect('/main')
+              })
+            })
+          }, function(error){
+            console.log(error)
+            res.status(500)
+          })
+        }
+      })
+    })
+  })
+  //
+
   //로그인
   app.get('/login', function(req, res){
     console.log('Login')
@@ -43,37 +91,26 @@ module.exports = function(passport){
   )
   //
 
-  //회원가입
-  app.get('/signup', function(req, res){
-    console.log('Signup')
-    if(req.session.passport && req.session.passport.user){
+  //로그아웃
+  app.get('/logout', function(req, res){
+    req.logout()
+    req.session.save(function(){
       res.redirect('/main')
-    }
-    else{
-      res.render('signup', {id:req.session.passport.user})
-    }
+    })
   })
-  app.post('/signup', function(req, res){
-    hasher({password:req.body.password}, function(err, pass, salt, hash){
-      var userdata = {
-        id:req.body.username,
-        pw:hash,
-        salt:salt,
-        email:req.body.email
+  //
+
+  //회원정보
+  app.get('/profile/:id', function(req, res){
+    var sql = 'SELECT FROM log WHERE id=:id'
+    var param = {
+      params:{
+        id:req.params.id
       }
-      var sql = 'INSERT INTO log(id, pw, salt, email) VALUES(:id, :pw, :salt, :email)'
-      db_log.query(sql, {params:userdata})
-      .then(function(reuslts){
-        req.login(userdata, function(err){
-          req.session.save(function(){
-            console.log('Complete Signup')
-            res.redirect('/main')
-          })
-        })
-      }, function(error){
-        cosole.log(error)
-        res.status(500)
-      })
+    }
+    db_log.query(sql, param)
+    .then(function(results){
+      res.render('user', {results:results[0], id:req.session.passport.user})
     })
   })
   //
@@ -320,13 +357,6 @@ module.exports = function(passport){
   })
   //
 
-  //로그아웃
-  app.get('/logout', function(req, res){
-    req.logout()
-    req.session.save(function(){
-      res.redirect('/main')
-    })
-  })
 
   return app
 }
