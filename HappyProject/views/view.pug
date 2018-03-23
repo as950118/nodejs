@@ -1,0 +1,81 @@
+doctype html
+html
+  head
+    link(rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+    style.
+      textarea.autosize{min-height:50px}
+  body
+    nav.navbar.navbar-default
+      .container
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#myNavbar')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          .navbar-brand SCREENDOOR
+        #myNavbar.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/main') Main
+            li
+              a(href='/board/1') Board
+            if id
+              li
+                a(href='/profile/' + id) Profile
+              li
+                a.btn-danger(href='/logout') Logout
+            else
+              li
+                a.btn-warning(href='/login') Login
+              li
+                a.btn-warning(href='/signup') Signup
+    .container
+      div.row
+        div.col-md-12
+            h3.text-primary
+              a(href='#') #{results.title}
+        div.col-md-12.comment
+          div.panel.panel-striped
+            div.panel-heading
+              div.panel-title
+                a(href='/profile/' + results.id) #{results.id}
+                a.pull-right(href='#') #{results.date}
+            div.panel-body
+              div.content.post(style='line-height:30px;')
+                h4 #{results.content}
+        div-col-md-12
+          table.table.table-striped
+            thead
+              tr
+                th(style='width:10%') ID
+                th(style='width:60%') Reply
+                th(style='width:20%') Date
+                th(style='width:5%')
+                th(style='width:5%')
+              tbody
+                - for(i=0; i<results_reply.length; i++)
+                  tr
+                    td #{results_reply[i].id}
+                    td #{results_reply[i].reply}
+                    td #{results_reply[i].date}
+                    if results_reply[i].id == id
+                      td
+                        a.btn-warning.pull-right(href='/update_reply/' + results_reply[i].no + '/' + results_reply[i].id) Update
+                      td
+                        a.btn-danger.pull-right(href='/delete_reply/' + results_reply[i].no + '/' + results_reply[i].id) Delete
+                    else
+                      td
+                      td
+        if id
+          div
+            form(action='/reply' method='post')
+              textarea.autosize(style='resize:none;width:100%;height:100%' rows='3' placeholder='Reply' name='reply')
+              input(type='hidden' name='board_no' value=results.no)
+              input(type='submit' value='Reply')
+        if results.id == id
+          a.btn.btn-danger.pull-right(href='/delete/'+ results.no + '/' + results.id) Delete
+          a.btn.btn-warning.pull-right(href='/update/'+ results.no + '/' + results.id) Update
+
+    script(src='https://code.jquery.com/jquery-2.2.4.min.js', integrity='sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
