@@ -6,6 +6,7 @@ module.exports = function(){
   var bodyParser = require('body-parser')//url을 분석하기위해
   app.set('views', './views')
   app.set('view engine', 'ejs')
+  app.use(express.static('public'))
   app.locals.pretty = true//template의 줄바꿈을 자동으로 해줌
   app.listen(3003, function(){
     console.log('Connected 3003 port')

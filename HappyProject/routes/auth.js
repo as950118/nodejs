@@ -8,6 +8,8 @@ module.exports = function(passport){
   require('date-utils')
   var newDate = new Date()
 
+
+
   //메인
   app.get('/main', function(req, res){
     console.log('Main')

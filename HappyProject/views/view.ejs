@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <style type="text/css">
+    A:link {
+      text-decoration: none;
+      color: black;
+    }
+
+    A:visited {
+      text-decoration: none;
+      color: black;
+    }
+
+    A:hover {
+      text-decoration: none;
+      color: red;
+    }
+  </style>
+  <style>
+    body {
+        background: #ffffff;
+        padding: 20px 0;
+    }
+
+    #login-form > div {
+        margin: 15px 0;
+    }
+
+</style>
+
+  <likn rel="shortcut icon" type="image/x-icon" href="../favicon-16x16.png">
+</head>
+
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="main"><img src="../favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">A menu
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="/board/1">Board</a>
+            </li>
+            <li>
+              <a href="/user/"+<%=id%>>Profile</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">B menu
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#">One</a>
+            </li>
+            <li>
+              <a href="#">Two</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">Log
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <%if(id){%>
+                <a href="/logout">Log out</a>
+            </li>
+            <%}else{%>
+              <li>
+                <a href="/login">Log In</a>
+              </li>
+              <li>
+                <a href="/signup">Sign Up</a>
+              </li>
+              <%}%>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="text-primary"><a href="#"></a></h3>
+        </div>
+        <div class="col-md-12 comment">
+          <div class="panel panel-striped">
+            <div class="panel-heading">
+              <div class="panel-title"><a href="/profile/undefined"></a><a class="pull-right" href="#"></a></div>
+            </div>
+            <div class="panel-body">
+              <div class="content post" style="line-height:30px">
+                <h4></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-striped">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <span>
+                TITLE :
+              </span>
+              <a href="#">
+                <%=results.title%>
+              </a>
+              <div>
+                <span>
+                  ID :
+                </span>
+              <a href="/profile/<=%results.id%>">
+                <%=results.id%>
+              </a>
+            </div>
+            <div>
+
+                <span>
+                  DATE :
+                </span>
+              <a href="#">
+                <%=results.date%>
+              </a>
+            </div>
+            </div>
+            <div class="panel-body">
+                  <span>
+                    CONTENTS :
+                  </span>
+
+                  <%=results.content%>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th style="width:10%">ID</th>
+                <th style="width:60%">Reply</th>
+                <th style="width:20%">Date</th>
+                <th style="width:5%"></th>
+                <th style="width:5%"></th>
+              </tr>
+              <tbody>
+                <%for(i=0; i<results_reply.length; i++){%>
+                  <tr>
+                    <td>
+                      <%=results_reply[i].id%>
+                    </td>
+
+                      <td>
+                        <%=results_reply[i].reply%>
+                      </td>
+
+                        <td>
+                          <%=results_reply[i].date%>
+                        </td>
+                    <%if(results_reply[i].id==id){%>
+                      <td>
+                        <a class="btn-danger pull-right" href="/delete_reply/<%=results_reply[i].no%>/<%=results_reply[i].id%>">Delete</a>
+                      </td>
+                    <%}else{%>
+                      <td>
+                      </td>
+                    <%}%>
+                  </tr>
+                <%}%>
+              </tbody>
+            </thead>
+          </table>
+        </div>
+        <%if(results.id==id){%>
+        <a class="btn btn-danger pull-right" href="/delete/undefined/undefined">Delete</a><a class="btn btn-warning pull-right" href="/update/undefined/undefined">Update</a>
+        <%}%>
+      </div>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
