@@ -112,7 +112,7 @@ module.exports = function(passport){
     }
     db_log.query(sql, param)
     .then(function(results){
-      res.render('user', {results:results[0], id:req.session.passport.user})
+      res.render('profile', {results:results[0], id:req.session.passport.user})
     })
   })
   //
@@ -120,7 +120,7 @@ module.exports = function(passport){
   //게시판
   app.get('/board/:num', function(req, res){
     console.log('Board')
-    var sql = 'SELECT FROM board ORDER BY no DESC'
+    var sql = 'SELECT FROM board WHERE available==true ORDER BY no DESC'
     db_board.query(sql)
     .then(function(results){
       if(req.session.passport && req.session.passport.user){
@@ -133,6 +133,23 @@ module.exports = function(passport){
     })
   })
   //
+
+  //게시판2
+  app.get('/board2', function(req,res){
+    console.log('Board2')
+    var sql = 'SELECT FROM board WHERE available==true ORDER BY no DESC'
+    db_board.query(sql)
+    .then(function(results){
+      if(req.session.passport && req.session.passport.user){
+        var id = req.session.passport.user
+      }
+      else{
+        var id = ''
+      }
+
+    res.render('board2', {results:results, id:id, num:req.params.num})
+  })
+  })
 
   //글쓰기
   app.get('/write', function(req, res){
@@ -149,26 +166,29 @@ module.exports = function(passport){
     var sql ='SELECT FROM board ORDER BY no'
     db_board.query(sql)
     .then(function(results){
-      //첫번째 글일경우
-      if(results.length===0){
-        var len = 1
-      }
-      else{
-        var len = results[results.length-1].no + 1
-      }
+      // //첫번째 글일경우
+      // if(results.length===0){
+      //   var no = 1
+      // }
+      // else{
+      //   var no = results[results.length-1].no + 1
+      // }
+      //로직이 비효율적이라 그냥 첫번째글은 공지로 하고 진행
+      var len = results[results.length-1].no + 1
       var board = {
         params:{
           title:req.body.title,
           content:req.body.content,
           id:req.user.id,
-          pw:req.user.hash,
+          //pw:req.user.hash,
           salt:req.user.salt,
           date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS'),
           no:len,
-          view:0
+          view:0,
+          available:1
         }
       }
-      var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt)'
+      var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt, available) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt, :available)'
       db_board.query(sql, board)
       .then(function(reuslts2){
         console.log('Complete Write')
@@ -224,19 +244,27 @@ module.exports = function(passport){
   app.get('/delete/:no/:id', function(req, res){
     console.log('Delete : ' + req.params.no)
     if(req.params.id === req.session.passport.user){
-      var sql = 'DELETE FROM board WHERE no=:no'
-      var param = {
+      var sql = 'UPDATE board SET available=:available WHERE no=:no'
+      var param ={
         params:{
-          no:parseInt(req.params.no)
+          no:parseInt(req.params.no),
+          available:0
         }
       }
-      db_board.query(sql, param)
-      .then(function(results){
-        console.log('Complete Delete')
-        res.redirect('/board/1')
-      })
-    }
-    else{
+    //아예삭제하면 기록이 안남아서 안됨 !
+    //   var sql = 'DELETE FROM board WHERE no=:no'
+    //   var param = {
+    //     params:{
+    //       no:parseInt(req.params.no)
+    //     }
+    //   }
+       db_board.query(sql, param)
+       .then(function(results){
+         console.log('Complete Delete')
+         res.redirect('/board/1')
+       })
+     }
+      else{
       res.redirect('/view/' + req.params.no)
     }
   })
@@ -311,13 +339,15 @@ module.exports = function(passport){
       })
     })
   })
+
   //댓글 삭제
   app.get('/delete_reply/:no/:id', function(req, res){
     if(req.params.id === req.session.passport.user){
-      var sql = 'DELETE FROM reply WHERE no=:no'
+      var sql = 'UPDATE reply SET available=:available WHERE no=:no'
       var param = {
         params:{
-          no:req.params.no
+          no:req.params.no,
+          available:0
         }
       }
       db_reply.query(sql, param)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <style type="text/css">
       A:link {
         text-decoration: none;
@@ -20,95 +20,98 @@
     </style>
     <style>
       body {
-          background: #ffffff;
-          padding: 20px 0;
+        background: #ffffff;
+        padding: 50px 50px;
       }
 
-      #login-form > div {
-          margin: 15px 0;
+      #login-form>div {
+        margin: 15px 0;
       }
+    </style>
 
-  </style>
+
     <likn rel="shortcut icon" type="image/x-icon" href="favicon-16x16.png">
   </head>
 
   <body>
     <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="main"><img src="favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
         <ul class="nav navbar-nav">
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">A menu
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">A menu
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#">One</a>
+                <a class="dropdown-item" href="/board/1">Board</a>
               </li>
               <li>
-                <a href="#">Two</a>
+                <%if(id){%>
+                  <a class="dropdown-item" href="/profile/<%=id%>">Profile</a>
+                  <%}%>
               </li>
             </ul>
           </li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">B menu
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">B menu
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#">One</a>
+                <a class="dropdown-item" href="#">One</a>
               </li>
               <li>
-                <a href="#">Two</a>
+                <a class="dropdown-item" href="#">Two</a>
               </li>
             </ul>
           </li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown">Log
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">Log
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               <li>
                 <%if(id){%>
-                  <a href="logout">Log out</a>
+                  <a class="dropdown-item" href="/logout">Log out</a>
               </li>
               <%}else{%>
                 <li>
-                  <a href="login">Log In</a>
+                  <a class="dropdown-item" href="/login">Log In</a>
                 </li>
                 <li>
-                  <a href="signup">Sign Up</a>
+                  <a class="dropdown-item" href="signup">Sign Up</a>
                 </li>
                 <%}%>
             </ul>
           </li>
         </ul>
       </nav>
-      <div class="panel panel-collaspe col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-      <div class="panel-heading">
-        <div class="panel-title">SignUp</div>
-      </div>
-      <form action="/signup" method="post" class="panel-body">
-      <div>
-        <input type="text" class="form-control" name="username" placeholder="ID"autofocus>
+<p></p>
+      <div class="card border-light text-center w-50" style="margin:10px 25%">
         <p></p>
-      </div>
-      <div>
-        <input type="password" class="form-control" name="password" placeholder="PW">
-        <p></p>
-      </div>
-      <div>
-        <input type="email" class="form-control" name="email" placeholder="Email">
-        <p></p>
-      </div>
-      <div>
-        <button type="submit" class="form-control btn btn-primary pull-left">SignUp</button>
-    </div>
-    </form>
+        <div class="card-title"><h5 class="card-text">SIGN UP</h5></div>
+        <form action="/signup" method="post" class="card-body">
+        <div>
+          <input type="text" class="form-control" name="username" placeholder="ID" autofocus>
+          <p></p>
+        </div>
+        <div>
+          <input type="password" class="form-control" name="password" placeholder="PW">
+          <p></p>
+        </div>
+        <div>
+          <input type="email" class="form-control" name="email" placeholder="Email">
+          <p></p>
+        </div>
+        <div>
+          <button type="submit" class="form-control btn btn-dark pull-left">SignUp</button>
+        </div>
+        </form>
   </div>
 </div>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
   </body>
 </html>

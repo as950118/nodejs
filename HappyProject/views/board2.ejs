@@ -1,0 +1,225 @@
+<!DOCTYPE>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <style type="text/css">
+    A:link {
+      text-decoration: none;
+      color: black;
+    }
+
+    A:visited {
+      text-decoration: none;
+      color: black;
+    }
+
+    A:hover {
+      text-decoration: none;
+      color: red;
+    }
+  </style>
+  <style>
+    body {
+      background: #ffffff;
+      padding: 50px 50px;
+    }
+
+    #login-form>div {
+      margin: 15px 0;
+    }
+  </style>
+
+
+  <likn rel="shortcut icon" type="image/x-icon" href="/favicon-16x16.png">
+</head>
+
+<body>
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="/main"><img src="/favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">A menu
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="/board/1">Board</a>
+            </li>
+            <li>
+              <%if(id){%>
+                <a class="dropdown-item" href="/profile/<%=id%>">Profile</a>
+                <%}%>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">B menu
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="#">One</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Two</a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">Log
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <%if(id){%>
+                <a class="dropdown-item" href="/logout">Log out</a>
+            </li>
+            <%}else{%>
+              <li>
+                <a class="dropdown-item" href="/login">Log In</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/signup">Sign Up</a>
+              </li>
+              <%}%>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+
+    <p></p>
+    <div><img src="logo2.png"></div>
+    <div><img src="logo2.png"></div>
+    <div><img src="logo2.png"></div>
+    <div><img src="logo2.png"></div>
+    <div id="Menu" style="display:none;">
+  <div class="fixed-action-btn horizontal click-to-toggle">
+    <a class="btn-floating btn-large waves-effect waves-light teal lighten-2">
+    <i class="material-icons">menu</i>
+    </a>
+    <ul>
+    <li id="Add"><a class="btn-floating purple darken-1"><i class="material-icons">add</i></a></li>
+    <li id="Up"><a class="btn-floating cyan lighten-4"><i class="material-icons">arrow_upward</i></a></li>
+    </ul>
+  </div>
+</div>
+    <%if(id){%>
+      <a href="/write"><button type="button" class="btn btn-dark" style="margin:0 95%">Write</button>
+    </a>
+      <%}%>
+
+      <script type="text/javascript">
+        'use strict';
+        // 브라우저 이벤트 체크용 플래그 (게시물 클릭 이외에는 세션스토리지 삭제)
+        var $browserEvent = false;
+        // 게시물 클릭 시 true
+        $(document).on("click",".container a",function(){
+          $browserEvent = true;
+        });
+        $(function() {
+          // 스크롤 바닥일 시 메뉴 추가 (더보기 및 위로 스크롤)
+          $(window).scroll(function(e) {
+            if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
+                $('#Menu').show();
+            } else {
+              $('#Menu').hide();
+              if ($('.click-to-toggle').hasClass('active')) {
+                $('.click-to-toggle').removeClass('active');
+              }
+            }
+          });
+          // 클릭 시 위로 스크롤
+          $('#Up').on("click",function() {
+                $('html,body').animate({
+                  scrollTop:0
+                }, 1000);
+          });
+          // 세션 스토리지에 페이지 번호를 저장했기에 있으면 세션스토리지 값부터 페이지 번호 없으면 1부터 시작.
+          var currentState = sessionStorage.getItem('$add');
+          if (currentState != null) {
+            var $page = Number(currentState);
+            $('.row').remove();
+            $('.container').html(sessionStorage.getItem('$addList'));
+          } else {
+            var $page = 1;
+            loadItem($page);
+          }
+          // 더 보기 버튼 클릭
+          $(document).on("click","#Add",function(e){
+            e.preventDefault();
+            // 마지막 페이지가 아닐 시에만 실행
+            if (!$('#Add').hasClass("disabled")) {
+              $page = $page + 1;
+              $('.layer').fadeIn();
+              setTimeout(function () {
+                loadItem($page);
+                $('.layer').fadeOut();
+              }, 1500);
+            }
+          });
+          // 링크 빼고 브라우저 이벤트 일 시 세션스토리지 삭제
+          window.onbeforeunload = function () {
+            // 플래그가 false일 때만
+            if ($browserEvent === false) {
+              sessionStorage.clear();
+            }
+          };
+        });
+        // 해당 페이지 값을 받아서 리스트를 추가 ajax 함수
+        function loadItem(Page){
+          $.ajax({
+            url: '/paging/add',
+            type: 'post',
+            data : {'page': Page},
+            success:function(Data){
+              if(Data.result){
+                var $item = $.map(Data.articles.contents, function(Article) {
+                  return '<div class="row"><div class="col s12 m8 offset-m2 l6 offset-l3">'
+                  +'<div class="card-panel grey lighten-5 z-depth-1">'
+                    +'<div class="row valign-wrapper">'
+                      +'<div class="col s2">'
+                        +'<a href="/paging/view/'+Article._id+'"><img src="'+Article.image+'" alt="" class="responsive-img"></a>'
+                      +'</div>'
+                      +'<div class="col s10">'
+                        +'<span class="black-text">'
+                          +'<a href="/paging/view/'+Article._id+'">'+Article.title+'</a>'
+                        +'</span>'
+                      +'</div>'
+                    +'</div>'
+                  +'</div>'
+                +'</div></div>'
+                  }).join('');
+                  // 갖고 온 리스트 추가
+                 $('.container').append($item);
+                 // 세션 스토리지에 현재 페이지 저장
+                 sessionStorage.setItem('$add',Page);
+                 // 세션 스토리지에 전체 리스트 저장
+                 sessionStorage.setItem('$addList',$('.container').html());
+                 // 현재 페이지가 마지막 페이지면 클래스 추가
+                 if (Page == Data.articles.pnTotal) {
+                   $('#Add').addClass('disabled');
+                 } else {
+                   $('#Add').removeClass('disabled');
+                 }
+              } else {
+                console.log('등록된 글이 없습니다.');
+              }
+            },
+            error:function(request,status,error){
+              console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+      </script>
+
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+
+</html>

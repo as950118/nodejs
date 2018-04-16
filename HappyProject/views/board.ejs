@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
   <style type="text/css">
     A:link {
       text-decoration: none;
@@ -22,70 +22,76 @@
   <style>
     body {
       background: #ffffff;
-      padding: 20px 0;
+      padding: 50px 50px;
     }
 
     #login-form>div {
       margin: 15px 0;
     }
   </style>
-  <likn rel="shortcut icon" type="image/x-icon" href="favicon-16x16.png" />
+
+
+  <likn rel="shortcut icon" type="image/x-icon" href="/favicon-16x16.png">
 </head>
 
 <body>
   <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="/main"><img src="../favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="/main"><img src="/favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">A menu
-                <b class="caret"></b>
-              </a>
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">A menu
+            <b class="caret"></b>
+          </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="/board/1">Board</a>
+              <a class="dropdown-item" href="/board/1">Board</a>
             </li>
             <li>
-              <a href="/user/" +<%=id%>>Profile</a>
+              <%if(id){%>
+                <a class="dropdown-item" href="/profile/<%=id%>">Profile</a>
+                <%}%>
             </li>
           </ul>
         </li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">B menu
-                <b class="caret"></b>
-              </a>
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">B menu
+            <b class="caret"></b>
+          </a>
           <ul class="dropdown-menu">
             <li>
-              <a href="#">One</a>
+              <a class="dropdown-item" href="#">One</a>
             </li>
             <li>
-              <a href="#">Two</a>
+              <a class="dropdown-item" href="#">Two</a>
             </li>
           </ul>
         </li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown">Log
-                <b class="caret"></b>
-              </a>
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">Log
+            <b class="caret"></b>
+          </a>
           <ul class="dropdown-menu">
             <li>
               <%if(id){%>
-                <a href="/logout">Log out</a>
+                <a class="dropdown-item" href="/logout">Log out</a>
             </li>
             <%}else{%>
               <li>
-                <a href="/login">Log In</a>
+                <a class="dropdown-item" href="/login">Log In</a>
               </li>
               <li>
-                <a href="/signup">Sign Up</a>
+                <a class="dropdown-item" href="/signup">Sign Up</a>
               </li>
               <%}%>
           </ul>
         </li>
       </ul>
     </nav>
+
+    <p></p>
     <table class="table table-collaspe table-striped">
-      <thead>
+      <thead class="thead-dark">
         <tr>
           <th style="width:10%">No</th>
           <th style="width:50%">Title</th>
@@ -153,20 +159,20 @@
           <option name="id">ID</option>
         </select>
       <input type="text" class="form-control" name="search">
-      <button type="submit" class="form-control btn btn-primary">Search</button>
-    </form>
+      <button type="submit" class="form-control btn btn-dark">Search</button>
+
+      </form>
     <%if(id){%>
-      <a class="btn btn-primary pull-right" href="/write">Write
+      <a href="/write"><button type="button" class="btn btn-dark" style="margin:0 95%">Write</button>
     </a>
       <%}%>
-  </div>
-  <div class="text-center">
-    <ul class="pagination">
-      <li><a href="/board/1">First</a></li>
+  <nav aria-label="...">
+    <ul class="pagination justify-content-center">
+      <li class="page-item"><a class="page-link" href="/board/1">First</a></li>
       <%if(results.length%10==0){%>
         <%for(i=1; i<=results.length/10; i++){%>
-        <li>
-          <a href="/board/"+i>
+        <li class="page-item">
+          <a class="page-link" href="/board/"+i>
             <%=i%>
           </a>
         </li>
@@ -174,23 +180,24 @@
       <%}else{%>
         <%if(results.length!=0){%>
           <%for(i=1; i<=(results.length/10)+1; i++){%>
-            <li>
-              <a href="/board/<%=i%>">
+            <li class="page-item">
+              <a class="page-link" href="/board/<%=i%>">
                 <%=i%>
               </a>
             </li>
           <%}%>
         <%}else{%>
-          <li>
-            <a href="/board/1">1</a>
+          <li class="page-item">
+            <a class="page-link" href="/board/1">1</a>
           </li>
         <%}%>
       <%}%>
     </ul>
+  </nav>
   </div>
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 </body>
 
 </html>
