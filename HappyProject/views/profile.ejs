@@ -30,13 +30,13 @@
     </style>
 
 
-    <likn rel="shortcut icon" type="image/x-icon" href="favicon-16x16.png">
+    <likn rel="shortcut icon" type="image/x-icon" href="/favicon-16x16.png">
   </head>
 
   <body>
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="main"><img src="favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
+        <a class="navbar-brand" href="main"><img src="/favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
         <ul class="nav navbar-nav">
           <li class="dropdown">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">A menu
@@ -89,28 +89,37 @@
       </nav>
 
       <p></p>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="text-primary">Profile</h3>
-        </div>
-        <div-col-md-12>
+        <div class="card border-light">
+          <div class="card-header border-light">
+            <div class="card-title text-center border-light">
+              <h5>
+              PROFILE
+              </h5>
+            </div>
+          </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <%=results.id%>
+                  </li>
+                  <li class="list-group-item">
+                    <%=results.email%>
+                  </li>
+                  <li class="list-group-item">
+                    <%=results.id%>
+                  </li>
+                  <li class="list-group-item">
+                    <%=results.id%>
+                  </li>
+                </ul>
+            </div>
+          </div>
+          <p></p>
+        <div class="float-right">
+          <a class="btn btn-warning href" /update_profile/ + id>Update</a>
           <div-col-md-12>
-            <h4>ID  </h4>
-          </div-col-md-12>
-          <div-col-md-12>
-            <h4>Email  </h4>
-          </div-col-md-12>
-          <div-col-md-12>
-            <h4>Date  </h4>
-          </div-col-md-12>
-        </div-col-md-12>
-        <div class="pull-right">
-          <div-col-md-12><a class="btn btn-warning href" /update_profile/ + id>Update</a></div-col-md-12>
-          <div-col-md-12><a class="btn btn-danger href" /delete_profile/ + id>Delete</a></div-col-md-12>
-        </div>
-      </div>
-    </div>
+            <a class="btn btn-danger href" /delete_profile/ + id>Delete</a>
+          </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>

@@ -31,13 +31,13 @@
   </style>
 
 
-  <likn rel="shortcut icon" type="image/x-icon" href="favicon-16x16.png">
+  <likn rel="shortcut icon" type="image/x-icon" href="/favicon-16x16.png">
 </head>
 
 <body>
   <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="main"><img src="favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
+      <a class="navbar-brand" href="main"><img src="/favicon-32x32.png" alt="main" style= "height:26px; width:26px"/></a>
       <ul class="nav navbar-nav">
         <li class="dropdown">
           <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">A menu
@@ -91,107 +91,90 @@
 
     <p></p>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="text-primary"><a href="#"></a></h3>
-        </div>
-        <div class="col-md-12 comment">
-          <div class="panel panel-striped">
-            <div class="panel-heading">
-              <div class="panel-title"><a href="/profile/undefined"></a><a class="pull-right" href="#"></a></div>
-            </div>
-            <div class="panel-body">
-              <div class="content post" style="line-height:30px">
-                <h4></h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-striped">
-          <div class="panel-heading">
-            <div class="panel-title">
-              <span>
-                TITLE :
-              </span>
-              <a href="#">
+        <div class="card border-light" style="width:100%">
+          <img class="card-img-top" src="/logo2.png" alt="image">
+          <div class="card-header" style="background:darkgrey">
+            <div class="card-title text-center">
+              <h5><a href="#">
                 <%=results.title%>
-              </a>
-              <div>
-                <span>
-                  ID :
-                </span>
-              <a href="/profile/<=%results.id%>">
-                <%=results.id%>
-              </a>
-            </div>
-            <div>
-
-                <span>
-                  DATE :
-                </span>
-              <a href="#">
-                <%=results.date%>
-              </a>
-            </div>
-            </div>
-            <div class="panel-body">
-                  <span>
-                    CONTENTS :
-                  </span>
-
-                  <%=results.content%>
-              </div>
+              </a></h5>
             </div>
           </div>
-
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <a class="float-right" href="/profile/<=%results.id%>">
+                  <%=results.id%>
+                </a>
+              </li>
+              <li class="list-group-item float-right">
+                <a class="float-right" href="/profile/<=%results.date%>">
+                  <%=results.date%>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <h5>
+                  <%=results.content%>
+                </h5>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th style="width:10%">ID</th>
-                <th style="width:60%">Reply</th>
-                <th style="width:20%">Date</th>
-                <th style="width:5%"></th>
-                <th style="width:5%"></th>
-              </tr>
-              <tbody>
-                <%for(i=0; i<results_reply.length; i++){%>
-                  <tr>
-                    <td>
-                      <%=results_reply[i].id%>
+        <table class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+              <th style="width:10%">ID</th>
+              <th style="width:60%">Reply</th>
+              <th style="width:20%">Date</th>
+              <th style="width:10%"></th>
+            </tr>
+            <tbody>
+              <%for(i=0; i<results_reply.length; i++){%>
+                <tr>
+                  <td>
+                    <%=results_reply[i].id%>
+                  </td>
+
+                  <td>
+                    <%=results_reply[i].reply%>
+                  </td>
+
+                  <td>
+                    <%=results_reply[i].date%>
+                  </td>
+                  <%if(results_reply[i].id==id){%>
+                    <td class="float-right">
+                      <a class="btn btn-danger" href="/delete_reply/<%=results_reply[i].no%>/<%=results_reply[i].id%>">Delete</a>
                     </td>
-
-                      <td>
-                        <%=results_reply[i].reply%>
-                      </td>
-
-                        <td>
-                          <%=results_reply[i].date%>
-                        </td>
-                    <%if(results_reply[i].id==id){%>
-                      <td>
-                        <a class="btn-danger pull-right" href="/delete_reply/<%=results_reply[i].no%>/<%=results_reply[i].id%>">Delete</a>
-                      </td>
                     <%}else{%>
                       <td>
                       </td>
-                    <%}%>
-                  </tr>
+                      <%}%>
+                </tr>
                 <%}%>
-              </tbody>
-            </thead>
-          </table>
+            </tbody>
+          </thead>
+        </table>
+        <%if(id){%>
+          <div>
+          <form action="/reply" method="post" style="width:100%">
+            <textarea class="autosize" style='resize:none; width:100%; height:100%' rows='3' placeholder='Reply' name='reply'></textarea>
+            <input type="hidden" name="board_no" value=results.no></input>
+            <button class="btn btn-dark float-left" type="submit">Reply</input>
+          </form>
         </div>
-        <%if(results.id==id){%>
-        <a class="btn btn-danger pull-right" href="/delete/<%=results.no%>/<%=results.id%>">Delete</a><a class="btn btn-warning pull-right" href="/update/<%=results.no%>/<%=results.id%>">Update</a>
-        <%}%>
-      </div>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-  </body>
+          <%}%>
+            <%if(results.id==id){%>
+              <div class="float-right">
+              <a class="btn btn-warning" href="/update/<%=results.no%>/<%=results.id%>">Update</a>
+              <a class="btn btn-danger" href="/delete/<%=results.no%>/<%=results.id%>">Delete</a>
+              </div>
+              <%}%>
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+</body>
+
 </html>

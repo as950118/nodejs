@@ -7,6 +7,16 @@ module.exports = function(passport){
   var db_reply = require('./db_reply.js')()
   require('date-utils')
   var newDate = new Date()
+  var multer = require('multer')
+  var storage = multer.diskStorage({
+    destination : function(req, file, cb){
+      cb(null, 'public/')
+    },
+    filename : function(req, file, cb){
+      cb(null, file.originalname)
+    }
+  })
+  var upload = multer({storage:storage})
 
 
 
@@ -68,6 +78,18 @@ module.exports = function(passport){
     })
   })
   //
+
+  //instagram passport
+  app.get('/auth/instagram',
+    passport.authenticate('instagram'),
+    function(req,res){
+    }
+  )
+  app.get('/auth/instagram/callback',  passport.authenticate('instagram',
+    {failureRedirect:'/login'}),
+    function(req, res){
+      res.redirect('/main')
+  })
 
   //로그인
   app.get('/login', function(req, res){
@@ -162,7 +184,7 @@ module.exports = function(passport){
       res.redirect('/main')
     }
   })
-  app.post('/write', function(req, res){
+  app.post('/write', upload.single('userfile'), function(req, res){
     var sql ='SELECT FROM board ORDER BY no'
     db_board.query(sql)
     .then(function(results){
@@ -191,7 +213,7 @@ module.exports = function(passport){
       var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt, available) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt, :available)'
       db_board.query(sql, board)
       .then(function(reuslts2){
-        console.log('Complete Write')
+        console.log('Complete Write + ' + req.file.originalname)
         res.redirect('/board/1')
       }, function(error){
         console.log(error)
@@ -200,6 +222,7 @@ module.exports = function(passport){
     })
   })
   //
+
 
   //글읽기
   app.get('/view/:no', function(req, res){

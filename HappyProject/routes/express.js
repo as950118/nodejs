@@ -4,6 +4,7 @@ module.exports = function(){
   var session = require('express-session')
   var orientoStore = require('connect-oriento')(session) // OrientDB의 session 연동
   var bodyParser = require('body-parser')//url을 분석하기위해
+  
   app.set('views', './views')
   app.set('view engine', 'ejs')
   app.use(express.static('public'))

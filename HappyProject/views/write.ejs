@@ -95,29 +95,30 @@
       <thead>
       </thead>
       <tbody>
-        <form action="/write" method="post" enctype="multiplart/form-data">
+        <form action="/write" method="post" enctype="multipart/form-data">
           <tr>
             <th class="w-10">TITLE</th>
             <td>
-              <input style="width:100%" type="text" placeholder="Title" name="title" />
+              <input style="width:100%" type="text" placeholder="Title" name="title" required>
             </td>
           </tr>
           <tr>
             <th class="w-10">CONTENT</th>
             <td>
-              <textarea class="autosize" style="resize:none; width:100%" rows="10" placeholder="Content" name="content"></textarea>
+              <textarea class="autosize" style="resize:none; width:100%" rows="10" placeholder="Content" name="content" required></textarea>
             </td>
           </tr>
           <tr>
             <th class="w-10">FILE</th>
             <td>
+              <input type='file' name='userfile'>
               <div class="input-group mb-3">
                 <div class="input-group-prepend">
                   <button class="btn btn-outline-secondary" type="button">Button</button>
                 </div>
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="inputGroupFile03">
-                  <label class="custom-file-label" for="inputGroupFile03">Choose file</label>
+                  <input type="file" class="custom-file-input" name="myfile" id="myfile">
+                  <label class="custom-file-label" for="myfile">Choose file</label>
                 </div>
               </div>
             </td>

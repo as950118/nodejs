@@ -1,6 +1,7 @@
 module.exports = function(app){
   var passport = require('passport')
   var LocalStrategy = require('passport-local').Strategy
+  var InstagramStrategy = require('passport-instagram').Strategy
   var bkdf2Password = require('pbkdf2-password')
   var hasher = bkdf2Password()
   var db_log = require('./db_log.js')()
@@ -51,6 +52,18 @@ module.exports = function(app){
             done(null, false)
           }
         })
+      })
+    }
+  ))
+
+  passport.use(new InstagramStrategy({
+    clientID : "40a02b278e1c48f2b7981851eb1652d4",
+    clientSecreet : "5261e814d957445a99fea8006d8d13fa",
+    callbackURL: "http://localhost:3003/auth/instagram/callback"
+    },
+    function(accessToken, refreshToken, profile, done){
+      User.findOrCreate({instagramId : profile.id}, function(err, user){
+      return done(err,user)
       })
     }
   ))
