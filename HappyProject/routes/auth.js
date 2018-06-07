@@ -39,7 +39,7 @@ module.exports = function(passport){
       res.redirect('/main')
     }
     else{
-      res.render('signup', {id:req.session.passport.user})
+      res.render('signup')
     }
   })
   app.post('/signup', function(req, res){
@@ -157,7 +157,7 @@ module.exports = function(passport){
   //
 
   //게시판2
-  app.get('/board2', function(req,res){
+  app.get('/board_2', function(req,res){
     console.log('Board2')
     var sql = 'SELECT FROM board WHERE available==true ORDER BY no DESC'
     db_board.query(sql)
@@ -169,7 +169,7 @@ module.exports = function(passport){
         var id = ''
       }
 
-    res.render('board2', {results:results, id:id, num:req.params.num})
+    res.render('board_2', {results:results, id:id, num:req.params.num})
   })
   })
 
