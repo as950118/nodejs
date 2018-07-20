@@ -207,14 +207,15 @@ module.exports = function(passport){
           date:newDate.toFormat('YYYY-MM-DD HH24:MI:SS'),
           no:len,
           view:0,
-          available:1
+          available:1,
+          filename:req.file.originalname
         }
       }
-      var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt, available) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt, :available)'
+      var sql = 'INSERT INTO board(title, content, id, pw, date, no, view, salt, available, filename) VALUES(:title, :content, :id, :pw, :date, :no, :view, :salt, :available, :filename)'
       db_board.query(sql, board)
       .then(function(reuslts2){
         console.log('Complete Write + ' + req.file.originalname)
-        res.redirect('/board/1')
+        res.redirect('/view/'+len)
       }, function(error){
         console.log(error)
         res.status(500)
